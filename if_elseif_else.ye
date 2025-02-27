@@ -1,9 +1,0 @@
-ye x = 10
-
-agar x > 10
-  bol "x is greater than 10"
-yafir x == 10
-  bol "x is exactly 10"
-varna
-  bol "x is less than 10"
-

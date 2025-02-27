@@ -1,6 +1,0 @@
-ye x = 10
-ye y = 20
-
-ye sum = x + y
-ye gum = x + y + 10
-bol sum
