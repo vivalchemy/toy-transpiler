@@ -1,0 +1,24 @@
+ye a = 10
+ye b = 20
+ye message = "Hello World"
+
+bol message
+bol a
+
+agar a < b {
+  bol "a is less than b"
+  ye c = 30
+  bol c
+} yafir a > b {
+  bol "a is greater than b"
+} varna {
+  bol "a is equal to b"
+}
+
+jabtak a < 15 tabtak {
+  bol a
+  a = a + 2
+}
+
+ye result = 100
+bol result
