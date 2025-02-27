@@ -465,7 +465,10 @@ function generateC(ast) {
   function generateStatement(node, indent = "  ") {
     switch (node.type) {
       case "VAR_DECLARATION":
-        return `${indent}int ${node.name} = ${generateExpression(node.value)};`;
+        if (node.value.type == "STRING")
+          return `${indent}char* ${node.name} = ${generateExpression(node.value)};`;
+        if (node.value.type == "NUMBER")
+          return `${indent}int ${node.name} = ${generateExpression(node.value)};`;
 
       case "ASSIGNMENT":
         return `${indent}${node.name} = ${generateExpression(node.value)};`;
@@ -549,7 +552,10 @@ function generateCpp(ast) {
   function generateStatement(node, indent = "  ") {
     switch (node.type) {
       case "VAR_DECLARATION":
-        return `${indent}int ${node.name} = ${generateExpression(node.value)};`;
+        if (node.value.type == "STRING")
+          return `${indent}string ${node.name} = ${generateExpression(node.value)};`;
+        if (node.value.type == "NUMBER")
+          return `${indent}int ${node.name} = ${generateExpression(node.value)};`;
 
       case "ASSIGNMENT":
         return `${indent}${node.name} = ${generateExpression(node.value)};`;
