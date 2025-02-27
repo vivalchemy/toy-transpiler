@@ -32,7 +32,8 @@ test.py: bin
 
 test.rs: bin
 	./kanye input.ye -o $@
-	rustc  $@
+	rustc $@ -o test
+	./test
 
 test.kt: bin
 	./kanye input.ye -o $@
