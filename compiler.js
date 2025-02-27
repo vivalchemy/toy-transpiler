@@ -776,6 +776,256 @@ function generateRust(ast) {
   return code;
 }
 
+function generateKotlin(ast) {
+  let code = "fun main() {\n";
+
+  function generateExpression(expr) {
+    if (expr.type === "NUMBER") return expr.value;
+    if (expr.type === "STRING") return `"${expr.value}"`;
+    if (expr.type === "ID") return expr.value;
+    if (expr.type === "BINARY_EXPRESSION") {
+      let left = generateExpression(expr.left);
+      let right = generateExpression(expr.right);
+      return `${left} ${expr.operator} ${right}`;
+    }
+    throw new Error(`Unknown expression type: ${expr.type}`);
+  }
+
+  function generateCondition(condition) {
+    let left = generateExpression(condition.left);
+    let right = generateExpression(condition.right);
+    return `${left} ${condition.operator.value} ${right}`;
+  }
+
+  function generateStatement(node, indent = "    ") {
+    switch (node.type) {
+      case "VAR_DECLARATION":
+        return `${indent}var ${node.name} = ${generateExpression(node.value)}`;
+
+      case "ASSIGNMENT":
+        return `${indent}${node.name} = ${generateExpression(node.value)}`;
+
+      case "EXPRESSION_STATEMENT":
+        return `${indent}${generateExpression(node.expression)}`;
+
+      case "PRINT":
+        return `${indent}println(${generateExpression(node.value)})`;
+
+      case "IF_STATEMENT": {
+        let result = `${indent}if (${generateCondition(node.condition)}) {\n`;
+        for (const statement of node.body) {
+          result += `${generateStatement(statement, indent + "    ")}\n`;
+        }
+
+        if (node.elseIfBlocks && node.elseIfBlocks.length > 0) {
+          for (const elseIf of node.elseIfBlocks) {
+            result += `${indent}} else if (${generateCondition(elseIf.condition)}) {\n`;
+            for (const statement of elseIf.body) {
+              result += `${generateStatement(statement, indent + "    ")}\n`;
+            }
+          }
+        }
+
+        if (node.elseBlock) {
+          result += `${indent}} else {\n`;
+          for (const statement of node.elseBlock) {
+            result += `${generateStatement(statement, indent + "    ")}\n`;
+          }
+        }
+
+        result += `${indent}}`;
+        return result;
+      }
+
+      case "WHILE_LOOP": {
+        let result = `${indent}while (${generateCondition(node.condition)}) {\n`;
+        for (const statement of node.body) {
+          result += `${generateStatement(statement, indent + "    ")}\n`;
+        }
+        result += `${indent}}`;
+        return result;
+      }
+
+      default:
+        return `${indent}// Unsupported statement type: ${node.type}`;
+    }
+  }
+
+  for (const statement of ast.body) {
+    code += generateStatement(statement) + "\n";
+  }
+
+  code += "}";
+  return code;
+}
+
+function generateJava(ast) {
+  let code =
+    "public class Main {\n  public static void main(String[] args) {\n";
+
+  function generateExpression(expr) {
+    if (expr.type === "NUMBER") return expr.value;
+    if (expr.type === "STRING") return `"${expr.value}"`;
+    if (expr.type === "ID") return expr.value;
+    if (expr.type === "BINARY_EXPRESSION") {
+      let left = generateExpression(expr.left);
+      let right = generateExpression(expr.right);
+      return left + " " + expr.operator + " " + right;
+    }
+    throw new Error(`Unknown expression type: ${expr.type}`);
+  }
+
+  function generateCondition(condition) {
+    let left = generateExpression(condition.left);
+    let right = generateExpression(condition.right);
+    let op = condition.operator.value;
+    return left + " " + op + " " + right;
+  }
+
+  function generateStatement(node, indent = "    ") {
+    switch (node.type) {
+      case "VAR_DECLARATION":
+        return `${indent}${node.value.type} ${node.name} = ${generateExpression(node.value)};`;
+
+      case "ASSIGNMENT":
+        return `${indent}${node.name} = ${generateExpression(node.value)};`;
+
+      case "EXPRESSION_STATEMENT":
+        return `${indent}${generateExpression(node.expression)};`;
+
+      case "PRINT":
+        return `${indent}System.out.println(${generateExpression(node.value)});`;
+
+      case "IF_STATEMENT": {
+        let result = `${indent}if (${generateCondition(node.condition)}) {\n`;
+        for (const statement of node.body) {
+          result += `${generateStatement(statement, indent + "    ")}\n`;
+        }
+
+        if (node.elseIfBlocks && node.elseIfBlocks.length > 0) {
+          for (const elseIf of node.elseIfBlocks) {
+            result += `${indent}} else if (${generateCondition(elseIf.condition)}) {\n`;
+            for (const statement of elseIf.body) {
+              result += `${generateStatement(statement, indent + "    ")}\n`;
+            }
+          }
+        }
+
+        if (node.elseBlock) {
+          result += `${indent}} else {\n`;
+          for (const statement of node.elseBlock) {
+            result += `${generateStatement(statement, indent + "    ")}\n`;
+          }
+        }
+
+        result += `${indent}}`;
+        return result;
+      }
+
+      case "WHILE_LOOP": {
+        let result = `${indent}while (${generateCondition(node.condition)}) {\n`;
+        for (const statement of node.body) {
+          result += `${generateStatement(statement, indent + "    ")}\n`;
+        }
+        result += `${indent}}`;
+        return result;
+      }
+
+      default:
+        return `${indent}// Unsupported statement type: ${node.type}`;
+    }
+  }
+
+  for (const statement of ast.body) {
+    code += generateStatement(statement) + "\n";
+  }
+
+  code += "  }\n}";
+  return code;
+}
+
+function generatePython(ast) {
+  let code = "def main():\n";
+
+  function generateExpression(expr) {
+    if (expr.type === "NUMBER") return expr.value;
+    if (expr.type === "STRING") return `"${expr.value}"`;
+    if (expr.type === "ID") return expr.value;
+    if (expr.type === "BINARY_EXPRESSION") {
+      let left = generateExpression(expr.left);
+      let right = generateExpression(expr.right);
+      return `${left} ${expr.operator} ${right}`;
+    }
+    throw new Error(`Unknown expression type: ${expr.type}`);
+  }
+
+  function generateCondition(condition) {
+    let left = generateExpression(condition.left);
+    let right = generateExpression(condition.right);
+    let op = condition.operator.value;
+    return `${left} ${op} ${right}`;
+  }
+
+  function generateStatement(node, indent = "    ") {
+    switch (node.type) {
+      case "VAR_DECLARATION":
+        return `${indent}${node.name} = ${generateExpression(node.value)}`;
+
+      case "ASSIGNMENT":
+        return `${indent}${node.name} = ${generateExpression(node.value)}`;
+
+      case "EXPRESSION_STATEMENT":
+        return `${indent}${generateExpression(node.expression)}`;
+
+      case "PRINT":
+        return `${indent}print(${generateExpression(node.value)})`;
+
+      case "IF_STATEMENT": {
+        let result = `${indent}if ${generateCondition(node.condition)}:\n`;
+        for (const statement of node.body) {
+          result += `${generateStatement(statement, indent + "    ")}\n`;
+        }
+
+        if (node.elseIfBlocks && node.elseIfBlocks.length > 0) {
+          for (const elseIf of node.elseIfBlocks) {
+            result += `${indent}elif ${generateCondition(elseIf.condition)}:\n`;
+            for (const statement of elseIf.body) {
+              result += `${generateStatement(statement, indent + "    ")}\n`;
+            }
+          }
+        }
+
+        if (node.elseBlock) {
+          result += `${indent}else:\n`;
+          for (const statement of node.elseBlock) {
+            result += `${generateStatement(statement, indent + "    ")}\n`;
+          }
+        }
+
+        return result;
+      }
+
+      case "WHILE_LOOP": {
+        let result = `${indent}while ${generateCondition(node.condition)}:\n`;
+        for (const statement of node.body) {
+          result += `${generateStatement(statement, indent + "    ")}\n`;
+        }
+        return result;
+      }
+
+      default:
+        return `${indent}# Unsupported statement type: ${node.type}`;
+    }
+  }
+
+  for (const statement of ast.body) {
+    code += generateStatement(statement) + "\n";
+  }
+
+  code += '\nif __name__ == "__main__":\n    main()';
+  return code;
+}
+
 // CLI Handling
 function main() {
   const args = process.argv.slice(2);
@@ -812,12 +1062,10 @@ function main() {
     c: generateC,
     cpp: generateCpp,
     rs: generateRust,
-    //kt: generateKotlin,
-    //kotlin: generateKotlin,
-    //java: generateJava,
+    kt: generateKotlin,
+    java: generateJava,
     go: generateGo,
-    //py: generatePython,
-    //python: generatePython,
+    py: generatePython,
   };
 
   fs.readFile(fileName, "utf-8", (err, data) => {
