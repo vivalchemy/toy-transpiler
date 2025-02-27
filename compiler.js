@@ -885,7 +885,10 @@ function generateJava(ast) {
   function generateStatement(node, indent = "    ") {
     switch (node.type) {
       case "VAR_DECLARATION":
-        return `${indent}${node.value.type} ${node.name} = ${generateExpression(node.value)};`;
+        if (node.value.type == "STRING")
+          return `${indent}String ${node.name} = ${generateExpression(node.value)};`;
+        if (node.value.type == "NUMBER")
+          return `${indent}int ${node.name} = ${generateExpression(node.value)};`;
 
       case "ASSIGNMENT":
         return `${indent}${node.name} = ${generateExpression(node.value)};`;
