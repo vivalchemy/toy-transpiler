@@ -42,4 +42,5 @@ test: test.go test.js test.c test.java test.py test.rs test.kt
 
 clean:
 	rm -f kanye
-	rm -f test.*
+	rm -f test*
+	rm -f Main.*
