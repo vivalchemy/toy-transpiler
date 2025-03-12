@@ -62,6 +62,21 @@ function lexer(input) {
       continue;
     }
 
+    if (char === "'") {
+      let str = "";
+      cursor++; // Skip opening quote
+      while (cursor < input.length && input[cursor] !== "'") {
+        str += input[cursor];
+        cursor++;
+      }
+      if (cursor >= input.length) {
+        throw new Error("Unterminated string literal");
+      }
+      cursor++; // Skip closing quote
+      tokens.push({ type: "STRING", value: str });
+      continue;
+    }
+
     // Handle operators
     if (/[=+\-*/<>]/.test(char)) {
       let op = char;
