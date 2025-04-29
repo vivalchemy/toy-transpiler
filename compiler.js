@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 const keywords = {
   ye: "VAR",
@@ -1100,10 +1100,14 @@ function main() {
 
     try {
       const tokens = lexer(data);
-      console.log("Tokens:", tokens);
+      if(process.env.DEBUG == 'LEX' || process.env.DEBUG == 'ALL'){
+        console.log("Tokens:", tokens);
+      }
 
       const ast = parser(tokens);
-      console.log("AST:", JSON.stringify(ast, null, 2));
+      if(process.env.DEBUG == 'AST' || process.env.DEBUG == 'ALL'){
+        console.log("AST:", JSON.stringify(ast, null, 2));
+      }
 
       if (!(extension in languageGenerators)) {
         console.error("❌ Unsupported output format: " + extension);
