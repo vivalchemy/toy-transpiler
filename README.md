@@ -1,22 +1,22 @@
-# Toy Compiler
+# Toy Transpiler
 
-A simple compiler that translates code written in the "Kanye" language (with `.ye` extension) into various target languages.
+A simple code transpiler that converts source code written in the "Ye" language (with `.ye` extension) into various target programming languages.
 
 ## Contributors
 
 - [Vivian Ludrick (9914)](https://github.com/vivalchemy) - ast
 - [Rohit Patra (9928)](https://github.com/Rohitpatra007) - tokenizer
-- [Badal Singh (9933)](https://github.com/BadalSingh2) - generate functions some language
-- [Ronit Naik (9924)](https://github.com/RonitNaik122) - generate functions some language
-- [Pratyay Koley (9909)](https://github.com/PratyayKoley) - generate functions some language
+- [Badal Singh (9933)](https://github.com/BadalSingh2) - generate functions for target languages
+- [Ronit Naik (9924)](https://github.com/RonitNaik122) - generate functions for target languages
+- [Pratyay Koley (9909)](https://github.com/PratyayKoley) - generate functions for target languages
 
 ## Overview
 
-This compiler takes code written in a simplified language with Indian/Hindi-inspired keywords and translates it into several popular programming languages including JavaScript, Python, C, C++, Rust, Go, Java, and Kotlin.
+This is a toy transpiler that takes code written in a simplified Ye language with Hindi/Indian-inspired keywords and translates it into several popular programming languages including JavaScript, Python, C, C++, Rust, Go, Java, and Kotlin.
 
-## How the Compiler Works
+## How the Transpiler Works
 
-The compilation process follows these main steps:
+The transpilation process follows these main steps:
 
 1. **Lexical Analysis (Lexer)**: Converts the source code into tokens
 2. **Syntactic Analysis (Parser)**: Converts tokens into an Abstract Syntax Tree (AST)
@@ -24,7 +24,7 @@ The compilation process follows these main steps:
 
 ### Supported Language Keywords
 
-The Kanye language uses the following keywords:
+The Ye language uses the following keywords:
 
 | Keyword | Meaning     | Equivalent     |
 |---------|-------------|----------------|
@@ -49,11 +49,11 @@ The Kanye language uses the following keywords:
 
 ### Prerequisites
 
-- Node.js (to run the compiler)
+- Node.js (to run the transpiler)
 - Target language compilers/interpreters for testing (go, gcc, g++, javac, python, rustc, etc.)
 - Bun/Deno (for building the binary)
 
-### Building the Compiler
+### Building the Transpiler
 
 > [!NOTE]
 > You can directly run the code itself without building it first.
@@ -76,7 +76,7 @@ This will create an executable called `kanye`.
 > [!NOTE]
 > To directly run the code instead of building it, use `node compiler.js input.ye -o output.js`.
 
-This compiles the `input.ye` file to JavaScript and saves it to `output.js`. The output file format is based on the file extension.
+This transpiles the `input.ye` file to JavaScript and saves it to `output.js`. The output file format is based on the file extension.
 
 ### Supported Output Formats
 
@@ -93,7 +93,7 @@ Change the extension to generate code in different languages:
 
 ### Running Tests
 
-The included Makefile provides commands to compile and run the example code in various languages:
+The included Makefile provides commands to transpile and run the example code in various languages:
 
 ```bash
 # Test all supported languages
@@ -115,7 +115,7 @@ make clean
 
 ## Example Code
 
-Here's a simple example in the Kanye language:
+Here's a simple example in the Ye language:
 
 ```
 ye a = 10
@@ -152,11 +152,11 @@ This code:
 
 ## Project Structure
 
-- `compiler.js` - The main compiler code
+- `compiler.js` - The main transpiler code
 - `input.ye` - Example input file
 - `Makefile` - Build and test automation
 
-## How the Compiler Works in Detail
+## How the Transpiler Works in Detail
 
 ### 1. Lexical Analysis
 
@@ -205,14 +205,34 @@ a = 10
 2. **Multi-language Support**: Maintaining consistent semantics across different target languages.  
    Solution: Designed a flexible AST that captures the essential semantics, independent of target language syntax.
 
-3. **Error Handling**: Providing meaningful error messages for compilation errors.  
+3. **Error Handling**: Providing meaningful error messages for transpilation errors.  
    Solution: Implemented basic error handling with specific error messages for syntax and semantic issues.
 
-### 5. Appendix A: Full Compiler Code
+## Limitations
 
-The complete compiler implementation is available in the attached source file. The codebase is structured as follows:
+As a toy transpiler, Ye has several limitations:
 
-- Lexer (lexer function)
-- Parser (parser function and related helpers)
-- Code generators (multiple functions for different target languages)
-- CLI handling (command-line interface implementation)
+- Limited syntax and feature set
+- No optimization
+- No type checking or validation
+- Simple error handling
+- Supports only basic language constructs
+
+## Why a Transpiler, Not a Compiler?
+
+This project is technically a transpiler rather than a compiler because:
+
+1. It translates source code from one programming language to another
+2. It doesn't generate machine code or bytecode
+3. The output still requires interpretation or compilation by another tool
+4. It performs source-to-source translation rather than source-to-binary conversion
+
+## Future Work
+
+Potential improvements could include:
+
+- Adding support for functions
+- Implementing type checking
+- Adding more complex data structures
+- Improving error handling and reporting
+- Supporting more language features
